@@ -3,6 +3,7 @@ package com.gregwoodfill.collectionsdemo
 import com.gregwoodfill.collectionsdemo.domain.Person
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldEqual
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Month
@@ -10,6 +11,7 @@ import java.time.MonthDay
 
 class ListTest {
     @Nested
+    @DisplayName("given a list of strings")
     class GivenAListOfStrings {
         val strings = listOf("a", "b", "c", "")
 
@@ -36,6 +38,7 @@ class ListTest {
     }
 
     @Nested
+    @DisplayName("given a map")
     class GivenMap {
         val mapDemo = mapOf(
                 "NAME" to "greg",
@@ -51,6 +54,7 @@ class ListTest {
     }
 
     @Nested
+    @DisplayName("given a family")
     class GivenFamily {
         val greg = Person(
                 firstName = "greg",
