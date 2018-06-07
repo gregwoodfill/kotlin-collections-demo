@@ -1,16 +1,15 @@
 package com.gregwoodfill.collectionsdemo
 
 import com.gregwoodfill.collectionsdemo.domain.Person
-import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldEqual
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Month
 import java.time.MonthDay
-import java.util.stream.Collectors
 
-class ListTest {
+class CombiningTest {
+
     @Nested
     @DisplayName("given a list of strings")
     class GivenAListOfStrings {
@@ -18,31 +17,12 @@ class ListTest {
 
         @Test
         fun `it should filter and map`() {
-            strings.filter { it.isBlank() }.size shouldEqual 1
-            strings.map { "$it foo" }[0] shouldEqual "a foo"
-
             val filteredAndMapped = strings.filter { it.isNotBlank() }.map { it.toUpperCase() }
             filteredAndMapped shouldEqual listOf("A", "B", "C")
         }
 
         @Test
-        fun `java 8 stream filter should work`() {
-            val streamed = strings.stream().filter { it.isBlank() }.collect(Collectors.toList())
-            streamed shouldEqual listOf("")
-        }
-
-        @Test
-        fun `java 8 stream map should work`() {
-            val mapped = strings
-                    .stream()
-                    .filter { it.isNotBlank() }
-                    .map {
-                        it.toUpperCase()
-                    }.collect(Collectors.toList())
-        }
-
-        @Test
-        fun `it should fold`() {
+        fun `it should reduce`() {
             listOf("a", "b", "c")
                     .reduce { acc, s -> "$acc-$s" } shouldEqual "a-b-c"
         }
@@ -63,7 +43,8 @@ class ListTest {
 
         @Test
         fun `it should map keys and values`() {
-            val transformed = mapDemo.mapKeys { it.key.toLowerCase() }
+            val transformed = mapDemo
+                    .mapKeys { it.key.toLowerCase() }
                     .mapValues { it.value.capitalize() }
 
             transformed["name"] shouldEqual "Greg"
@@ -93,15 +74,9 @@ class ListTest {
         }
 
         @Test
-        fun `it should map to a new list`() {
-            val capitalized = family.map {
-                it.copy(
-                        firstName = it.firstName.capitalize(),
-                        lastName = it.lastName.capitalize())
-            }
-
-            capitalized.filter { it.lastName == "woodfill" }.shouldBeEmpty()
-            capitalized.filter { it.lastName == "Woodfill" }.size shouldEqual 3
+        fun `sorts and takes`() {
+            family.sortedBy { it.firstName }.take(2)
+            // [Person(firstName=amanda, lastName=woodfill, birthday=--08-02), Person(firstName=greg, lastName=woodfill, birthday=--03-02)]
         }
     }
 }
