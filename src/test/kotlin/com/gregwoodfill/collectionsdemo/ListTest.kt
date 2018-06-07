@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Month
 import java.time.MonthDay
+import java.util.stream.Collectors
 
 class ListTest {
     @Nested
@@ -22,6 +23,22 @@ class ListTest {
 
             val filteredAndMapped = strings.filter { it.isNotBlank() }.map { it.toUpperCase() }
             filteredAndMapped shouldEqual listOf("A", "B", "C")
+        }
+
+        @Test
+        fun `java 8 stream filter should work`() {
+            val streamed = strings.stream().filter { it.isBlank() }.collect(Collectors.toList())
+            streamed shouldEqual listOf("")
+        }
+
+        @Test
+        fun `java 8 stream map should work`() {
+            val mapped = strings
+                    .stream()
+                    .filter { it.isNotBlank() }
+                    .map {
+                        it.toUpperCase()
+                    }.collect(Collectors.toList())
         }
 
         @Test
@@ -54,7 +71,7 @@ class ListTest {
     }
 
     @Nested
-    @DisplayName("given a family")
+    @DisplayName("given a list of objects")
     class GivenFamily {
         val greg = Person(
                 firstName = "greg",
